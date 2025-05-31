@@ -8,7 +8,7 @@ struct SplashScreenView: View {
         NavigationStack {
             if isActive {
                 // 🔁 Navigate to home screen here
-                HomeView()
+                LoginView()
             } else {
                 ZStack {
                     LinearGradient(
