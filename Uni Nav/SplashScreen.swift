@@ -29,9 +29,10 @@ struct SplashScreenView: View {
                                     .frame(width: 120, height: 120)
                                     .shadow(radius: 10)
                                 
-                                Text("NAVI")
-                                    .font(.headline)
-                                    .foregroundColor(.purple)
+                                Image("logo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 120, height: 120)
                             }
 
                             VStack(spacing: 8) {
@@ -76,16 +77,16 @@ struct SplashScreenView: View {
     private func startLoading() {
         Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
             if progress < 1.0 {
-                progress += 0.02
+                progress = min(progress + 0.02, 1.0) // Clamp at 1.0
             } else {
                 timer.invalidate()
-                // 🔁 Trigger navigation
                 withAnimation {
                     isActive = true
                 }
             }
         }
     }
+
 }
 
 #Preview {
