@@ -11,7 +11,7 @@ import SwiftUI
 struct Uni_NavApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreenView()
         }
     }
 }
