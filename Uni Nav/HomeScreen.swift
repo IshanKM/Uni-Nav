@@ -5,6 +5,8 @@ struct HomeView: View {
         Text("🏠 Welcome to Home Screen!")
             .font(.largeTitle)
             .padding()
+            .navigationBarBackButtonHidden(true)
+            
     }
 }
 
