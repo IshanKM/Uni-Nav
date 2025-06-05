@@ -144,11 +144,15 @@ struct HomeView: View {
                         NavigationLink(destination: PlacesView()) {
                             NavigationCard(title: "Places", imageName: "chemistry_lab")
                         }
-
-                        // Other static cards or future links
-                        NavigationCard(title: "Chemistry Lab", imageName: "chemistry_lab")
-                        NavigationCard(title: "Chemistry Lab", imageName: "chemistry_lab")
-                        NavigationCard(title: "Chemistry Lab", imageName: "chemistry_lab")
+                        NavigationLink(destination: PlacesView()) {
+                            NavigationCard(title: "BackToYou", imageName: "chemistry_lab")
+                        }
+                        NavigationLink(destination: PlacesView()) {
+                            NavigationCard(title: "Places", imageName: "chemistry_lab")
+                        }
+                        NavigationLink(destination: PlacesView()) {
+                            NavigationCard(title: "Places", imageName: "chemistry_lab")
+                        }
                     }
                     .padding(.horizontal, 20)
                     
