@@ -125,7 +125,7 @@ struct LoginView: View {
 
                             // ✅ Hidden NavigationLink triggered by state
                             NavigationLink(
-                                destination: HomeView(),
+                                destination: MainTabView(),
                                 isActive: $navigateToHome,
                                 label: { EmptyView() }
                             )

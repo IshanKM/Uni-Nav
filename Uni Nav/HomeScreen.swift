@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct HomeView: View {
+struct HomeTestView: View {
     var body: some View {
         Text("🏠 Welcome to Home Screen!")
             .font(.largeTitle)
