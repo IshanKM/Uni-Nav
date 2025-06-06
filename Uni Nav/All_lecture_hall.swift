@@ -253,10 +253,10 @@ struct LectureHallDetailView: View {
                         
                         // Hall details
                         VStack(spacing: 12) {
-                            DetailRow(icon: "location", title: "Location", value: "Main Building, Floor 2")
-                            DetailRow(icon: "person.2", title: "Capacity", value: "120 Students")
-                            DetailRow(icon: "desktopcomputer", title: "Equipment", value: "Projector, Sound System")
-                            DetailRow(icon: "clock", title: "Available Hours", value: "8:00 AM - 6:00 PM")
+                            DetailsRow(icon: "location", title: "Location", value: "Main Building, Floor 2")
+                            DetailsRow(icon: "person.2", title: "Capacity", value: "120 Students")
+                            DetailsRow(icon: "desktopcomputer", title: "Equipment", value: "Projector, Sound System")
+                            DetailsRow(icon: "clock", title: "Available Hours", value: "8:00 AM - 6:00 PM")
                         }
                     }
                     .padding(20)
@@ -318,7 +318,7 @@ struct LectureHallDetailView: View {
 }
 
 // Detail Row Component
-struct DetailRow: View {
+struct DetailsRow: View {
     let icon: String
     let title: String
     let value: String

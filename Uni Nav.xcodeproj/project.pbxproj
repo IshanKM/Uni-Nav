@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		860E73D12DF37E8A00760047 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = 860E73D02DF37E8A00760047 /* SVGKit */; };
+		860E73D32DF37E8A00760047 /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 860E73D22DF37E8A00760047 /* SVGKitSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		86580F962DE965FA0043E8F8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				860E73D32DF37E8A00760047 /* SVGKitSwift in Frameworks */,
+				860E73D12DF37E8A00760047 /* SVGKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +119,8 @@
 			);
 			name = "Uni Nav";
 			packageProductDependencies = (
+				860E73D02DF37E8A00760047 /* SVGKit */,
+				860E73D22DF37E8A00760047 /* SVGKitSwift */,
 			);
 			productName = "Uni Nav";
 			productReference = 86580F882DE965F80043E8F8 /* Uni Nav.app */;
@@ -195,6 +204,9 @@
 			);
 			mainGroup = 86580F7F2DE965F80043E8F8;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				860E73CF2DF37E8A00760047 /* XCRemoteSwiftPackageReference "SVGKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 86580F892DE965F80043E8F8 /* Products */;
 			projectDirPath = "";
@@ -395,6 +407,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5PAV4P2KD7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -422,6 +435,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5PAV4P2KD7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -550,6 +564,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		860E73CF2DF37E8A00760047 /* XCRemoteSwiftPackageReference "SVGKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SVGKit/SVGKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		860E73D02DF37E8A00760047 /* SVGKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 860E73CF2DF37E8A00760047 /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKit;
+		};
+		860E73D22DF37E8A00760047 /* SVGKitSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 860E73CF2DF37E8A00760047 /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKitSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 86580F802DE965F80043E8F8 /* Project object */;
 }
