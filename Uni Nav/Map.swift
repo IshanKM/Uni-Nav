@@ -1,4 +1,4 @@
-// CampusMapView.swift - Fixed Zoom and Pan like Google Maps
+// CampusMapView.swift - Fixed Marker Positioning
 import SwiftUI
 import WebKit
 
@@ -10,6 +10,7 @@ struct CampusMapView: View {
     @State private var showRoomDetails = false
     @State private var scale: CGFloat = 1.0
     @State private var offset = CGSize.zero
+    @State private var svgSize: CGSize = .zero
     
     let floors = ["G", "1", "2"]
     
@@ -198,7 +199,8 @@ struct CampusMapView: View {
                             EnhancedSVGWebView(
                                 svgFileName: "Ground-flow",
                                 selectedRoom: $selectedRoom,
-                                roomDatabase: roomDatabase
+                                roomDatabase: roomDatabase,
+                                svgSize: $svgSize
                             )
                             .scaleEffect(scale)
                             .offset(offset)
@@ -223,31 +225,15 @@ struct CampusMapView: View {
                                 )
                             )
                             
-                            // Selected room marker with animation
+                            // Selected room marker with animation - FIXED POSITIONING
                             if let selectedRoom = selectedRoom {
-                                VStack {
-                                    // Pulsing outer circle
-                                    Circle()
-                                        .fill(Color.red.opacity(0.3))
-                                        .frame(width: 40, height: 40)
-                                        .scaleEffect(1.5)
-                                        .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: selectedRoom)
-                                    
-                                    // Inner marker
-                                    Circle()
-                                        .fill(Color.red)
-                                        .frame(width: 20, height: 20)
-                                        .overlay(
-                                            Circle()
-                                                .stroke(Color.white, lineWidth: 3)
-                                        )
-                                        .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 2)
-                                }
-                                .position(
-                                    x: (selectedRoom.position.x * geometry.size.width * scale) + offset.width + geometry.size.width/2,
-                                    y: (selectedRoom.position.y * geometry.size.height * scale) + offset.height + geometry.size.height/2
-                                )
-                                .animation(.spring(response: 0.5, dampingFraction: 0.8), value: selectedRoom)
+                                // Get element position from JavaScript
+                                RoomMarkerView(room: selectedRoom)
+                                    .position(
+                                        x: (selectedRoom.position.x * geometry.size.width) + offset.width,
+                                        y: (selectedRoom.position.y * geometry.size.height) + offset.height
+                                    )
+                                    .scaleEffect(scale)
                             }
                         }
                     }
@@ -388,7 +374,10 @@ struct CampusMapView: View {
                         scale = 2.0
                         
                         // Center the room (adjust offset to center the selected room)
-                        offset = CGSize(width: -100, height: -100)
+                        offset = CGSize(
+                            width: -room.position.x * UIScreen.main.bounds.width + UIScreen.main.bounds.width/4,
+                            height: -room.position.y * UIScreen.main.bounds.height + UIScreen.main.bounds.height/4
+                        )
                     }
                 }
                 break
@@ -397,11 +386,38 @@ struct CampusMapView: View {
     }
 }
 
-// Simplified SVG WebView without gesture conflicts
+// Room marker view
+struct RoomMarkerView: View {
+    let room: RoomInfo
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Pulsing outer circle
+            Circle()
+                .fill(Color.red.opacity(0.3))
+                .frame(width: 40, height: 40)
+                .scaleEffect(1.5)
+                .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: UUID())
+            
+            // Inner marker
+            Circle()
+                .fill(Color.red)
+                .frame(width: 20, height: 20)
+                .overlay(
+                    Circle()
+                        .stroke(Color.white, lineWidth: 3)
+                )
+                .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 2)
+        }
+    }
+}
+
+// Enhanced SVG WebView with click detection and element position tracking
 struct EnhancedSVGWebView: UIViewRepresentable {
     let svgFileName: String
     @Binding var selectedRoom: RoomInfo?
     let roomDatabase: [String: RoomInfo]
+    @Binding var svgSize: CGSize
     
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
@@ -437,7 +453,28 @@ struct EnhancedSVGWebView: UIViewRepresentable {
                 document.getElementById('\(roomId)')?.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    window.webkit.messageHandlers.roomClicked.postMessage('\(roomId)');
+                    
+                    // Get element position
+                    const element = document.getElementById('\(roomId)');
+                    if (element) {
+                        const rect = element.getBoundingClientRect();
+                        const svgRect = document.querySelector('svg').getBoundingClientRect();
+                        
+                        // Calculate normalized position (0-1)
+                        const normalizedX = (rect.left + rect.width/2) / svgRect.width;
+                        const normalizedY = (rect.top + rect.height/2) / svgRect.height;
+                        
+                        // Send position and room ID
+                        const data = {
+                            id: '\(roomId)',
+                            x: normalizedX,
+                            y: normalizedY
+                        };
+                        
+                        window.webkit.messageHandlers.roomClicked.postMessage(JSON.stringify(data));
+                    } else {
+                        window.webkit.messageHandlers.roomClicked.postMessage('\(roomId)');
+                    }
                 });
                 """
             }.joined(separator: "\n")
@@ -478,6 +515,16 @@ struct EnhancedSVGWebView: UIViewRepresentable {
             <body>
                 \(svgContent)
                 <script>
+                    // Get SVG size
+                    const svgElement = document.querySelector('svg');
+                    if (svgElement) {
+                        const svgRect = svgElement.getBoundingClientRect();
+                        window.webkit.messageHandlers.svgSize.postMessage(JSON.stringify({
+                            width: svgRect.width,
+                            height: svgRect.height
+                        }));
+                    }
+                
                     // Add click handlers for all rooms
                     \(roomClickHandlers)
                     
@@ -510,8 +557,9 @@ struct EnhancedSVGWebView: UIViewRepresentable {
             </html>
             """
             
-            // Add message handler for room clicks
+            // Add message handlers
             webView.configuration.userContentController.add(context.coordinator, name: "roomClicked")
+            webView.configuration.userContentController.add(context.coordinator, name: "svgSize")
             
             webView.loadHTMLString(html, baseURL: nil)
         }
@@ -525,13 +573,51 @@ struct EnhancedSVGWebView: UIViewRepresentable {
         }
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            if message.name == "roomClicked", let roomId = message.body as? String {
-                // Handle room click
-                if let room = parent.roomDatabase[roomId] {
-                    DispatchQueue.main.async {
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                            self.parent.selectedRoom = room
+            if message.name == "roomClicked" {
+                if let jsonString = message.body as? String {
+                    // Try to parse as JSON first (for position data)
+                    if let data = jsonString.data(using: .utf8),
+                       let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                       let roomId = json["id"] as? String,
+                       let room = parent.roomDatabase[roomId] {
+                        
+                        // Update room with actual position if available
+                        var updatedRoom = room
+                        if let x = json["x"] as? CGFloat, let y = json["y"] as? CGFloat {
+                            updatedRoom = RoomInfo(
+                                id: room.id,
+                                name: room.name,
+                                floor: room.floor,
+                                displayFloor: room.displayFloor,
+                                position: CGPoint(x: x, y: y),
+                                searchTerms: room.searchTerms
+                            )
                         }
+                        
+                        DispatchQueue.main.async {
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                                self.parent.selectedRoom = updatedRoom
+                            }
+                        }
+                    } else if let roomId = message.body as? String,
+                              let room = parent.roomDatabase[roomId] {
+                        // Fallback to simple room ID
+                        DispatchQueue.main.async {
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                                self.parent.selectedRoom = room
+                            }
+                        }
+                    }
+                }
+            } else if message.name == "svgSize" {
+                if let jsonString = message.body as? String,
+                   let data = jsonString.data(using: .utf8),
+                   let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let width = json["width"] as? CGFloat,
+                   let height = json["height"] as? CGFloat {
+                    
+                    DispatchQueue.main.async {
+                        self.parent.svgSize = CGSize(width: width, height: height)
                     }
                 }
             }
@@ -758,6 +844,8 @@ struct RoundedCorner: Shape {
         return Path(path.cgPath)
     }
 }
+
+
 
 // Preview
 struct CampusMapView_Previews: PreviewProvider {

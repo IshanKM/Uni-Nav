@@ -142,16 +142,16 @@ struct HomeView: View {
                         GridItem(.flexible(), spacing: 10)
                     ], spacing: 15) {
                         NavigationLink(destination: PlacesView()) {
-                            NavigationCard(title: "Places", imageName: "chemistry_lab")
+                            NavigationCard(title: "Places", imageName: "places_logo")
+                        }
+                        NavigationLink(destination: BacktoYouView()) {
+                            NavigationCard(title: "BackToYou", imageName: "backtoyou_logo")
+                        }
+                        NavigationLink(destination: CampusMapView()) {
+                            NavigationCard(title: "Campus Map", imageName: "map_logo")
                         }
                         NavigationLink(destination: PlacesView()) {
-                            NavigationCard(title: "BackToYou", imageName: "chemistry_lab")
-                        }
-                        NavigationLink(destination: PlacesView()) {
-                            NavigationCard(title: "Places", imageName: "chemistry_lab")
-                        }
-                        NavigationLink(destination: PlacesView()) {
-                            NavigationCard(title: "Places", imageName: "chemistry_lab")
+                            NavigationCard(title: "Places", imageName: "places_logo")
                         }
                     }
                     .padding(.horizontal, 20)
@@ -200,24 +200,12 @@ struct NavigationCard: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            // Image or background
-            RoundedRectangle(cornerRadius: 12)
-                .fill(
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color.orange.opacity(0.8), Color.red.opacity(0.6)]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
+            // Image from Assets folder
+            Image(imageName)
+                .resizable()
+                .scaledToFit()
                 .frame(height: 100)
-                .overlay(
-                    ZStack {
-                        Circle().fill(Color.white.opacity(0.3)).frame(width: 20, height: 20).offset(x: -20, y: -15)
-                        Circle().fill(Color.white.opacity(0.4)).frame(width: 15, height: 15).offset(x: 15, y: -20)
-                        Circle().fill(Color.white.opacity(0.3)).frame(width: 18, height: 18).offset(x: 10, y: 15)
-                        Circle().fill(Color.white.opacity(0.6)).frame(width: 30, height: 30).blur(radius: 10)
-                    }
-                )
+                .cornerRadius(12)
 
             Text(title)
                 .font(.subheadline)
@@ -231,6 +219,7 @@ struct NavigationCard: View {
         .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 2)
     }
 }
+
 
 
 // TabButton Component
