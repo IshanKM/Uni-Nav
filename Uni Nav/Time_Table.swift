@@ -1,10 +1,10 @@
-// TimetableListView.swift
+
 import SwiftUI
 
 struct TimetableListView: View {
     @Environment(\.presentationMode) var presentationMode
     
-    // Sample timetable data
+
     let timetableItems = [
         TimetableItem(
             subject: "Web API Development",
@@ -40,7 +40,6 @@ struct TimetableListView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Custom Header
             HStack {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
@@ -58,8 +57,7 @@ struct TimetableListView: View {
                     .fontWeight(.medium)
                 
                 Spacer()
-                
-                // Invisible button for balance
+   
                 Button(action: {}) {
                     Image(systemName: "chevron.left")
                         .foregroundColor(.clear)
@@ -70,7 +68,7 @@ struct TimetableListView: View {
             .padding(.vertical, 15)
             .background(Color.white)
             
-            // Timetable List
+
             ScrollView {
                 LazyVStack(spacing: 16) {
                     ForEach(timetableItems, id: \.subject) { item in
@@ -79,7 +77,7 @@ struct TimetableListView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
-                .padding(.bottom, 100) // Extra padding for tab bar
+                .padding(.bottom, 100)
             }
             .background(Color.gray.opacity(0.05))
         }
@@ -87,7 +85,7 @@ struct TimetableListView: View {
     }
 }
 
-// Timetable Data Model
+
 struct TimetableItem {
     let subject: String
     let time: String
@@ -95,13 +93,13 @@ struct TimetableItem {
     let batch: String
 }
 
-// Timetable Card Component
+
 struct TimetableCard: View {
     let item: TimetableItem
     
     var body: some View {
         Button(action: {
-            // Handle timetable item tap
+      
         }) {
             VStack(alignment: .leading, spacing: 12) {
                 Text(item.subject)
@@ -155,7 +153,7 @@ struct TimetableCard: View {
     }
 }
 
-// Preview for TimetableListView
+
 struct TimetableListView_Previews: PreviewProvider {
     static var previews: some View {
         TimetableListView()

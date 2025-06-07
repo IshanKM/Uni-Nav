@@ -1,4 +1,4 @@
-// MainTabView.swift
+
 import SwiftUI
 
 struct MainTabView: View {
@@ -6,7 +6,7 @@ struct MainTabView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            // Home Tab
+    
             HomeView()
                 .tabItem {
                     Image(systemName: selectedTab == 0 ? "house.fill" : "house")
@@ -14,7 +14,7 @@ struct MainTabView: View {
                 }
                 .tag(0)
             
-            // Chat Tab
+  
             ChatView()
                 .tabItem {
                     Image(systemName: selectedTab == 1 ? "message.fill" : "message")
@@ -22,7 +22,7 @@ struct MainTabView: View {
                 }
                 .tag(1)
             
-            // Account Tab
+ 
             AccountView()
                 .tabItem {
                     Image(systemName: selectedTab == 2 ? "person.fill" : "person")
@@ -34,7 +34,6 @@ struct MainTabView: View {
     }
 }
 
-// DashboardView.swift (Home Tab Content)
 struct HomeView: View {
     @State private var selectedAnnouncementTab = "Announcement"
     
@@ -42,7 +41,7 @@ struct HomeView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Header
+  
                     HStack {
                         HStack(spacing: 8) {
                             Image(systemName: "globe")
@@ -60,7 +59,7 @@ struct HomeView: View {
                         Spacer()
                         
                         Button(action: {
-                            // Handle notifications
+         
                         }) {
                             Image(systemName: "bell.fill")
                                 .foregroundColor(.black)
@@ -70,7 +69,7 @@ struct HomeView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 10)
                     
-                    // Today's Timetable
+ 
                     VStack(spacing: 16) {
                         HStack {
                             Text("Today's TimeTable")
@@ -87,7 +86,7 @@ struct HomeView: View {
                         }
                         .padding(.horizontal, 20)
                         
-                        // Timetable Card
+  
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Web API Development")
                                 .font(.headline)
@@ -136,7 +135,6 @@ struct HomeView: View {
                         .padding(.horizontal, 20)
                     }
                     
-                    // Navigation Cards Grid
                     LazyVGrid(columns: [
                         GridItem(.flexible(), spacing: 10),
                         GridItem(.flexible(), spacing: 10)
@@ -155,8 +153,7 @@ struct HomeView: View {
                         }
                     }
                     .padding(.horizontal, 20)
-                    
-                    // Announcement/Events Section
+
                     VStack(spacing: 16) {
                         HStack(spacing: 40) {
                             TabButton(
@@ -221,8 +218,6 @@ struct NavigationCard: View {
 }
 
 
-
-// TabButton Component
 struct TabButton: View {
     let title: String
     let isSelected: Bool
@@ -247,7 +242,6 @@ struct TabButton: View {
     }
 }
 
-// AnnouncementCard Component
 struct AnnouncementCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -276,7 +270,7 @@ struct AnnouncementCard: View {
     }
 }
 
-// EventsContent Component
+
 struct EventsContent: View {
     var body: some View {
         VStack {
@@ -294,12 +288,11 @@ struct EventsContent: View {
 }
 
 
-// AccountView Component
 struct AccountView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                // Profile Section
+
                 VStack(spacing: 16) {
                     Circle()
                         .fill(Color.blue.opacity(0.2))
@@ -320,8 +313,7 @@ struct AccountView: View {
                         .foregroundColor(.gray)
                 }
                 .padding(.top, 40)
-                
-                // Account Options
+
                 VStack(spacing: 0) {
                     AccountRow(icon: "person.circle", title: "Profile Settings")
                     AccountRow(icon: "bell", title: "Notifications")
@@ -341,7 +333,7 @@ struct AccountView: View {
     }
 }
 
-// AccountRow Component
+
 struct AccountRow: View {
     let icon: String
     let title: String
@@ -349,7 +341,7 @@ struct AccountRow: View {
     
     var body: some View {
         Button(action: {
-            // Handle row tap
+
         }) {
             HStack(spacing: 16) {
                 Image(systemName: icon)
@@ -376,12 +368,11 @@ struct AccountRow: View {
 
 
 
-// Notification Extension
 extension Notification.Name {
     static let loginSuccess = Notification.Name("loginSuccess")
 }
 
-// Preview
+
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         MainTabView()

@@ -1,11 +1,10 @@
-// LectureHallsView.swift
+
 import SwiftUI
 
 struct LectureHallsView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var searchText = ""
-    
-    // Sample lecture halls data
+
     let lectureHalls = [
         LectureHall(
             id: 1,
@@ -73,7 +72,7 @@ struct LectureHallsView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Custom Header
+   
             HStack {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
@@ -92,7 +91,7 @@ struct LectureHallsView: View {
                 
                 Spacer()
                 
-                // Invisible button for balance
+   
                 Button(action: {}) {
                     Image(systemName: "chevron.left")
                         .foregroundColor(.clear)
@@ -103,7 +102,7 @@ struct LectureHallsView: View {
             .padding(.vertical, 15)
             .background(Color.white)
             
-            // Search Bar
+
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
@@ -120,7 +119,7 @@ struct LectureHallsView: View {
             .padding(.bottom, 8)
             .background(Color.white)
             
-            // Lecture Halls List
+
             ScrollView {
                 LazyVStack(spacing: 12) {
                     ForEach(filteredHalls, id: \.id) { hall in
@@ -137,7 +136,7 @@ struct LectureHallsView: View {
     }
 }
 
-// Lecture Hall Data Model
+
 struct LectureHall: Identifiable {
     let id: Int
     let name: String
@@ -145,7 +144,6 @@ struct LectureHall: Identifiable {
     let color: Color
 }
 
-// Lecture Hall Row Component
 struct LectureHallRow: View {
     let hall: LectureHall
     @State private var showDetails = false
@@ -155,12 +153,12 @@ struct LectureHallRow: View {
             showDetails = true
         }) {
             HStack(spacing: 16) {
-                // Color indicator dot
+     
                 Circle()
                     .fill(hall.color)
                     .frame(width: 10, height: 10)
                 
-                // Hall name
+  
                 Text(hall.name)
                     .font(.subheadline)
                     .fontWeight(.medium)
@@ -168,12 +166,11 @@ struct LectureHallRow: View {
                 
                 Spacer()
                 
-                // Availability status
+  
                 Text(hall.isAvailable ? "Available" : "Not Available")
                     .font(.caption)
                     .foregroundColor(hall.isAvailable ? .green : .red)
-                
-                // Arrow
+
                 Image(systemName: "chevron.right")
                     .foregroundColor(.gray)
                     .font(.caption)
@@ -190,14 +187,13 @@ struct LectureHallRow: View {
     }
 }
 
-// Lecture Hall Detail View (placeholder)
 struct LectureHallDetailView: View {
     let hall: LectureHall
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         VStack(spacing: 0) {
-            // Custom Header
+  
             HStack {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
@@ -216,7 +212,7 @@ struct LectureHallDetailView: View {
                 
                 Spacer()
                 
-                // Invisible button for balance
+
                 Button(action: {}) {
                     Image(systemName: "chevron.left")
                         .foregroundColor(.clear)
@@ -227,10 +223,9 @@ struct LectureHallDetailView: View {
             .padding(.vertical, 15)
             .background(Color.white)
             
-            // Content
+  
             ScrollView {
                 VStack(spacing: 24) {
-                    // Status Card
                     VStack(spacing: 16) {
                         HStack {
                             Text("Status")
@@ -251,7 +246,7 @@ struct LectureHallDetailView: View {
                         
                         Divider()
                         
-                        // Hall details
+    
                         VStack(spacing: 12) {
                             DetailsRow(icon: "location", title: "Location", value: "Main Building, Floor 2")
                             DetailsRow(icon: "person.2", title: "Capacity", value: "120 Students")
@@ -263,8 +258,7 @@ struct LectureHallDetailView: View {
                     .background(Color.white)
                     .cornerRadius(12)
                     .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 2)
-                    
-                    // Schedule Card
+      
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Today's Schedule")
                             .font(.headline)
@@ -291,10 +285,10 @@ struct LectureHallDetailView: View {
                     .cornerRadius(12)
                     .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 2)
                     
-                    // Book Button (if available)
+
                     if hall.isAvailable {
                         Button(action: {
-                            // Handle booking
+                           
                         }) {
                             Text("Book This Hall")
                                 .font(.headline)
@@ -317,7 +311,7 @@ struct LectureHallDetailView: View {
     }
 }
 
-// Detail Row Component
+
 struct DetailsRow: View {
     let icon: String
     let title: String
@@ -342,7 +336,7 @@ struct DetailsRow: View {
     }
 }
 
-// Schedule Row Component
+
 struct ScheduleRow: View {
     let time: String
     let subject: String
@@ -370,7 +364,6 @@ struct ScheduleRow: View {
 }
 
 
-// Place Card Content Component
 struct PlaceCardContent: View {
     let place: PlaceItem
     
@@ -387,7 +380,7 @@ struct PlaceCardContent: View {
                     .font(.title3)
             }
             
-            // Place Info
+           
             VStack(alignment: .leading, spacing: 4) {
                 Text(place.name)
                     .font(.subheadline)
@@ -406,7 +399,7 @@ struct PlaceCardContent: View {
             
             Spacer()
             
-            // Arrow
+       
             Image(systemName: "chevron.right")
                 .foregroundColor(.gray)
                 .font(.caption)
@@ -418,7 +411,6 @@ struct PlaceCardContent: View {
     }
 }
 
-// Placeholder views for other sections
 struct LabsView: View {
     @Environment(\.presentationMode) var presentationMode
     
@@ -547,7 +539,6 @@ struct CafeteriaView: View {
     }
 }
 
-// Preview for LectureHallsView
 struct LectureHallsView_Previews: PreviewProvider {
     static var previews: some View {
         LectureHallsView()

@@ -7,7 +7,6 @@ struct SplashScreenView: View {
     var body: some View {
         NavigationStack {
             if isActive {
-                // 🔁 Navigate to home screen here
                 LoginView()
             } else {
                 ZStack {
@@ -21,7 +20,6 @@ struct SplashScreenView: View {
                     VStack {
                         Spacer()
                         
-                        // Logo
                         VStack(spacing: 20) {
                             ZStack {
                                 Circle()
@@ -49,7 +47,6 @@ struct SplashScreenView: View {
 
                         Spacer()
 
-                        // Footer
                         VStack(spacing: 16) {
                             VStack(spacing: 4) {
                                 Text("Copyright © 2024 NAVI University")
@@ -77,7 +74,7 @@ struct SplashScreenView: View {
     private func startLoading() {
         Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
             if progress < 1.0 {
-                progress = min(progress + 0.04, 1.0) // Clamp at 1.0
+                progress = min(progress + 0.04, 1.0)
             } else {
                 timer.invalidate()
                 withAnimation {

@@ -1,10 +1,10 @@
 import SwiftUI
 
-// MARK: - Main Places View
+
 struct PlacesView: View {
     @Environment(\.presentationMode) var presentationMode
 
-    // Sample places data
+  
     let places = [
         PlaceItem(icon: "building.2", iconColor: .blue, name: "Lecture Halls", location: "Colombo Branch"),
         PlaceItem(icon: "flask", iconColor: .red, name: "Labs", location: "Colombo Branch"),
@@ -16,7 +16,7 @@ struct PlacesView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Custom Header
+        
             HStack {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
@@ -35,7 +35,6 @@ struct PlacesView: View {
 
                 Spacer()
 
-                // Invisible button for balance
                 Button(action: {}) {
                     Image(systemName: "chevron.left")
                         .foregroundColor(.clear)
@@ -46,7 +45,7 @@ struct PlacesView: View {
             .padding(.vertical, 15)
             .background(Color.white)
 
-            // Places List
+      
             ScrollView {
                 LazyVStack(spacing: 16) {
                     ForEach(places, id: \.name) { place in
@@ -63,7 +62,7 @@ struct PlacesView: View {
     }
 }
 
-// MARK: - Place Data Model
+
 struct PlaceItem {
     let icon: String
     let iconColor: Color
@@ -71,7 +70,7 @@ struct PlaceItem {
     let location: String
 }
 
-// MARK: - Place Card View with Navigation
+
 struct PlaceCard: View {
     let place: PlaceItem
 
@@ -84,8 +83,6 @@ struct PlaceCard: View {
             LabsView()
         case "Libraries":
             LibrariesView()
-        //case "Study Areas":
-           // StudyAreasView()
         case "Office":
             OfficeView()
         case "Cafeteria":
@@ -140,7 +137,7 @@ struct PlaceCard: View {
 
 
 
-// MARK: - Preview
+
 struct PlacesView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {

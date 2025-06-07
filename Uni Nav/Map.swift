@@ -1,4 +1,4 @@
-// CampusMapView.swift - Fixed Marker Positioning
+
 import SwiftUI
 import WebKit
 
@@ -14,7 +14,7 @@ struct CampusMapView: View {
     
     let floors = ["G", "1", "2"]
     
-    // Updated room database with better coordinates and search terms
+
     let roomDatabase: [String: RoomInfo] = [
         "Cafateria": RoomInfo(
             id: "Cafateria",
@@ -127,7 +127,7 @@ struct CampusMapView: View {
             Color.white.ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Header
+           
                 HStack {
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
@@ -147,7 +147,7 @@ struct CampusMapView: View {
                     Spacer()
                     
                     Button(action: {
-                        // Reset zoom and position
+                      
                         withAnimation(.easeInOut(duration: 0.5)) {
                             scale = 1.0
                             offset = .zero
@@ -162,7 +162,7 @@ struct CampusMapView: View {
                 .padding(.vertical, 15)
                 .background(Color.white)
                 
-                // Search Bar
+          
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.gray)
@@ -191,11 +191,11 @@ struct CampusMapView: View {
                 .padding(.bottom, 16)
                 .background(Color.white)
                 
-                // Interactive SVG Map
+       
                 ZStack {
                     GeometryReader { geometry in
                         ZStack {
-                            // Enhanced SVG WebView with click detection
+                          
                             EnhancedSVGWebView(
                                 svgFileName: "Ground-flow",
                                 selectedRoom: $selectedRoom,
@@ -206,28 +206,28 @@ struct CampusMapView: View {
                             .offset(offset)
                             .gesture(
                                 SimultaneousGesture(
-                                    // Pinch to zoom gesture
+                                
                                     MagnificationGesture()
                                         .onChanged { value in
                                             let newScale = scale * value
                                             scale = min(max(newScale, 0.5), 3.0)
                                         },
                                     
-                                    // Drag to pan gesture
+                                    
                                     DragGesture()
                                         .onChanged { value in
                                             offset = value.translation
                                         }
                                         .onEnded { value in
-                                            // Keep the final offset
+                                          
                                             offset = value.translation
                                         }
                                 )
                             )
                             
-                            // Selected room marker with animation - FIXED POSITIONING
+                          
                             if let selectedRoom = selectedRoom {
-                                // Get element position from JavaScript
+                            
                                 RoomMarkerView(room: selectedRoom)
                                     .position(
                                         x: (selectedRoom.position.x * geometry.size.width) + offset.width,
@@ -238,7 +238,7 @@ struct CampusMapView: View {
                         }
                     }
                     
-                    // Floor Selector
+                  
                     VStack {
                         Spacer()
                         
@@ -271,7 +271,7 @@ struct CampusMapView: View {
                         .padding(.bottom, selectedRoom != nil ? 200 : 100)
                     }
                     
-                    // Zoom controls - Fixed positioning and functionality
+                  
                     VStack {
                         HStack {
                             Spacer()
@@ -318,7 +318,7 @@ struct CampusMapView: View {
                 }
             }
             
-            // Enhanced Room Details Popup
+       
             if let room = selectedRoom {
                 VStack {
                     Spacer()
@@ -329,7 +329,7 @@ struct CampusMapView: View {
                             showRoomDetails = true
                         },
                         onDirectionsClick: {
-                            // Add directions functionality here
+                        
                             print("Directions to \(room.name)")
                         },
                         onClose: {
@@ -358,22 +358,21 @@ struct CampusMapView: View {
         
         guard !searchQuery.isEmpty else { return }
         
-        // Search through all rooms and their search terms
+      
         for (_, room) in roomDatabase {
             if room.searchTerms.contains(where: { $0.contains(searchQuery) }) ||
                room.name.lowercased().contains(searchQuery) {
                 
                 selectedFloor = room.floor
                 
-                // Animate to the room location
+      
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     withAnimation(.spring(response: 0.8, dampingFraction: 0.8)) {
                         selectedRoom = room
                         
-                        // Auto-zoom to the room
+             
                         scale = 2.0
-                        
-                        // Center the room (adjust offset to center the selected room)
+      
                         offset = CGSize(
                             width: -room.position.x * UIScreen.main.bounds.width + UIScreen.main.bounds.width/4,
                             height: -room.position.y * UIScreen.main.bounds.height + UIScreen.main.bounds.height/4
@@ -386,20 +385,20 @@ struct CampusMapView: View {
     }
 }
 
-// Room marker view
+
 struct RoomMarkerView: View {
     let room: RoomInfo
     
     var body: some View {
         VStack(spacing: 0) {
-            // Pulsing outer circle
+    
             Circle()
                 .fill(Color.red.opacity(0.3))
                 .frame(width: 40, height: 40)
                 .scaleEffect(1.5)
                 .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: UUID())
             
-            // Inner marker
+       
             Circle()
                 .fill(Color.red)
                 .frame(width: 20, height: 20)
@@ -412,7 +411,7 @@ struct RoomMarkerView: View {
     }
 }
 
-// Enhanced SVG WebView with click detection and element position tracking
+
 struct EnhancedSVGWebView: UIViewRepresentable {
     let svgFileName: String
     @Binding var selectedRoom: RoomInfo?
@@ -427,7 +426,7 @@ struct EnhancedSVGWebView: UIViewRepresentable {
         webView.scrollView.bounces = false
         webView.navigationDelegate = context.coordinator
         
-        // Disable built-in gestures to prevent conflicts
+ 
         webView.scrollView.pinchGestureRecognizer?.isEnabled = false
         webView.scrollView.panGestureRecognizer.isEnabled = false
         
@@ -447,7 +446,7 @@ struct EnhancedSVGWebView: UIViewRepresentable {
         if let svgPath = Bundle.main.path(forResource: svgFileName, ofType: "svg"),
            let svgContent = try? String(contentsOfFile: svgPath) {
             
-            // Create room click handlers JavaScript
+     
             let roomClickHandlers = roomDatabase.keys.map { roomId in
                 """
                 document.getElementById('\(roomId)')?.addEventListener('click', function(e) {
@@ -557,7 +556,7 @@ struct EnhancedSVGWebView: UIViewRepresentable {
             </html>
             """
             
-            // Add message handlers
+
             webView.configuration.userContentController.add(context.coordinator, name: "roomClicked")
             webView.configuration.userContentController.add(context.coordinator, name: "svgSize")
             
@@ -575,13 +574,13 @@ struct EnhancedSVGWebView: UIViewRepresentable {
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             if message.name == "roomClicked" {
                 if let jsonString = message.body as? String {
-                    // Try to parse as JSON first (for position data)
+
                     if let data = jsonString.data(using: .utf8),
                        let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                        let roomId = json["id"] as? String,
                        let room = parent.roomDatabase[roomId] {
                         
-                        // Update room with actual position if available
+        
                         var updatedRoom = room
                         if let x = json["x"] as? CGFloat, let y = json["y"] as? CGFloat {
                             updatedRoom = RoomInfo(
@@ -601,7 +600,7 @@ struct EnhancedSVGWebView: UIViewRepresentable {
                         }
                     } else if let roomId = message.body as? String,
                               let room = parent.roomDatabase[roomId] {
-                        // Fallback to simple room ID
+         
                         DispatchQueue.main.async {
                             withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
                                 self.parent.selectedRoom = room
@@ -625,13 +624,13 @@ struct EnhancedSVGWebView: UIViewRepresentable {
     }
 }
 
-// Enhanced Room Info Model with search terms
+
 struct RoomInfo: Identifiable, Equatable {
     let id: String
     let name: String
     let floor: Int
     let displayFloor: String
-    let position: CGPoint // Normalized coordinates (0.0 to 1.0)
+    let position: CGPoint
     let searchTerms: [String]
     
     static func == (lhs: RoomInfo, rhs: RoomInfo) -> Bool {
@@ -639,7 +638,7 @@ struct RoomInfo: Identifiable, Equatable {
     }
 }
 
-// Enhanced Room Details Popup
+
 struct EnhancedRoomDetailsPopup: View {
     let room: RoomInfo
     let onDetailsClick: () -> Void
@@ -683,7 +682,7 @@ struct EnhancedRoomDetailsPopup: View {
                     }
                 }
                 
-                // Action buttons
+          
                 HStack(spacing: 12) {
                     Button(action: onDirectionsClick) {
                         HStack {
@@ -723,7 +722,6 @@ struct EnhancedRoomDetailsPopup: View {
     }
 }
 
-// Enhanced Room Detail View
 struct RoomDetailView: View {
     let room: RoomInfo
     @Environment(\.presentationMode) var presentationMode
@@ -749,7 +747,7 @@ struct RoomDetailView: View {
                     
                     Divider()
                     
-                    // Details
+                   
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Room Information")
                             .font(.headline)
@@ -824,7 +822,7 @@ struct DetailRow: View {
     }
 }
 
-// Extension for corner radius
+
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners))
@@ -847,7 +845,6 @@ struct RoundedCorner: Shape {
 
 
 
-// Preview
 struct CampusMapView_Previews: PreviewProvider {
     static var previews: some View {
         CampusMapView()

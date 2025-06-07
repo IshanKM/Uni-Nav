@@ -7,20 +7,20 @@ struct BacktoYouView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Main Content
+            
             VStack(spacing: 0) {
-                // Title
+                
                 Text("Lost your Item ?")
                     .font(.title)
                     .fontWeight(.medium)
                     .padding(.top, 60)
                     .padding(.bottom, 40)
                 
-                // Illustration Section
+                
                 ZStack {
-                    // Orange arrows
+                    
                     HStack {
-                        // Left arrow
+                       
                         Image(systemName: "arrow.up.right")
                             .foregroundColor(.orange)
                             .font(.system(size: 24, weight: .medium))
@@ -29,7 +29,7 @@ struct BacktoYouView: View {
                         
                         Spacer()
                         
-                        // Right arrow
+                    
                         Image(systemName: "arrow.up.left")
                             .foregroundColor(.orange)
                             .font(.system(size: 24, weight: .medium))
@@ -38,41 +38,40 @@ struct BacktoYouView: View {
                     }
                     .frame(width: 200)
                     
-                    // Question mark
+                   
                     Text("?")
                         .font(.system(size: 36, weight: .bold))
                         .foregroundColor(.teal)
                         .offset(y: -50)
                     
-                    // Person illustration
                     VStack(spacing: 0) {
-                        // Head with hand
+                        
                         ZStack {
-                            // Main head
+                           
                             Ellipse()
                                 .fill(Color(red: 0.1, green: 0.2, blue: 0.6))
                                 .frame(width: 50, height: 55)
                             
-                            // Hand on head
+                            
                             Ellipse()
                                 .fill(Color(red: 0.1, green: 0.2, blue: 0.6))
                                 .frame(width: 20, height: 25)
                                 .offset(x: 25, y: -5)
                         }
                         
-                        // Neck
+                       
                         Rectangle()
                             .fill(Color(red: 0.1, green: 0.2, blue: 0.6))
                             .frame(width: 15, height: 10)
                         
-                        // Body/Torso
+                       
                         ZStack {
-                            // Main body
+                           
                             RoundedRectangle(cornerRadius: 25)
                                 .fill(Color(red: 0.1, green: 0.2, blue: 0.6))
                                 .frame(width: 90, height: 110)
                             
-                            // Right arm (visible arm)
+                           
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(Color(red: 0.1, green: 0.2, blue: 0.6))
                                 .frame(width: 25, height: 70)
@@ -85,7 +84,7 @@ struct BacktoYouView: View {
                 .frame(height: 180)
                 .padding(.bottom, 50)
                 
-                // Description Text
+               
                 VStack(spacing: 4) {
                     Text("Report or Announce lost items on the")
                         .font(.system(size: 16))
@@ -103,9 +102,9 @@ struct BacktoYouView: View {
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 50)
                 
-                // Action Buttons
+               
                 VStack(spacing: 16) {
-                    // I Lost Something Button
+                   
                     Button(action: {
                         showLostItemForm = true
                     }) {
@@ -130,7 +129,7 @@ struct BacktoYouView: View {
                         .cornerRadius(25)
                     }
                     
-                    // Announce Found Item Button
+                    
                     Button(action: {
                         showFoundItemForm = true
                     }) {
@@ -167,7 +166,7 @@ struct BacktoYouView: View {
     }
 }
 
-// Lost Item Form View
+
 struct LostItemFormView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var itemName = ""
@@ -182,7 +181,7 @@ struct LostItemFormView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Header
+                   
                     VStack(spacing: 8) {
                         Text("Report Lost Item")
                             .font(.title2)
@@ -195,9 +194,9 @@ struct LostItemFormView: View {
                     }
                     .padding(.top, 20)
                     
-                    // Form Fields
+                   
                     VStack(spacing: 20) {
-                        // Item Name
+                       
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Item Name")
                                 .font(.subheadline)
@@ -207,7 +206,7 @@ struct LostItemFormView: View {
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                         
-                        // Category
+                        
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Category")
                                 .font(.subheadline)
@@ -226,7 +225,7 @@ struct LostItemFormView: View {
                             .cornerRadius(8)
                         }
                         
-                        // Description
+                     
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Description")
                                 .font(.subheadline)
@@ -237,7 +236,7 @@ struct LostItemFormView: View {
                                 .lineLimit(3...6)
                         }
                         
-                        // Last Seen Location
+                      
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Last Seen Location")
                                 .font(.subheadline)
@@ -247,7 +246,7 @@ struct LostItemFormView: View {
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                         
-                        // Contact Info
+                      
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Contact Information")
                                 .font(.subheadline)
@@ -259,9 +258,9 @@ struct LostItemFormView: View {
                     }
                     .padding(.horizontal, 20)
                     
-                    // Submit Button
+                    
                     Button(action: {
-                        // Handle form submission
+                        
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Submit Report")
@@ -288,7 +287,7 @@ struct LostItemFormView: View {
     }
 }
 
-// Found Item Form View
+
 struct FoundItemFormView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var itemName = ""
@@ -303,7 +302,7 @@ struct FoundItemFormView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Header
+                    
                     VStack(spacing: 8) {
                         Text("Announce Found Item")
                             .font(.title2)
@@ -316,9 +315,9 @@ struct FoundItemFormView: View {
                     }
                     .padding(.top, 20)
                     
-                    // Form Fields
+                    
                     VStack(spacing: 20) {
-                        // Item Name
+                        
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Item Found")
                                 .font(.subheadline)
@@ -328,7 +327,7 @@ struct FoundItemFormView: View {
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                         
-                        // Category
+                       
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Category")
                                 .font(.subheadline)
@@ -347,7 +346,7 @@ struct FoundItemFormView: View {
                             .cornerRadius(8)
                         }
                         
-                        // Description
+                      
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Description")
                                 .font(.subheadline)
@@ -358,7 +357,7 @@ struct FoundItemFormView: View {
                                 .lineLimit(3...6)
                         }
                         
-                        // Found Location
+                       
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Found Location")
                                 .font(.subheadline)
@@ -367,8 +366,7 @@ struct FoundItemFormView: View {
                             TextField("Where did you find this item?", text: $foundLocation)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
-                        
-                        // Contact Info
+                       
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Contact Information")
                                 .font(.subheadline)
@@ -380,9 +378,9 @@ struct FoundItemFormView: View {
                     }
                     .padding(.horizontal, 20)
                     
-                    // Submit Button
+                   
                     Button(action: {
-                        // Handle form submission
+                       
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Announce Found Item")
@@ -409,7 +407,7 @@ struct FoundItemFormView: View {
     }
 }
 
-// Preview
+
 struct LostAndFoundView_Previews: PreviewProvider {
     static var previews: some View {
         BacktoYouView()

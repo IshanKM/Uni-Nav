@@ -10,9 +10,9 @@ struct ForgotPasswordView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // Main Content
+
                 VStack(alignment: .leading, spacing: 0) {
-                    // Navigation Header
+   
                     HStack {
                         Button(action: {
                             presentationMode.wrappedValue.dismiss()
@@ -37,7 +37,7 @@ struct ForgotPasswordView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 10)
 
-                    // Description Text
+    
                     VStack(alignment: .leading, spacing: 8) {
                         Text("To reset your password, submit your username or your email address below. If we can find you in the database, an email will be sent to your email address, with instructions how to get access again.")
                             .font(.system(size: 14))
@@ -48,7 +48,7 @@ struct ForgotPasswordView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 30)
 
-                    // Search By Username Section
+     
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Search By Username")
                             .font(.system(size: 16, weight: .medium))
@@ -80,7 +80,7 @@ struct ForgotPasswordView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 30)
 
-                    // Search By Email Address Section
+      
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Search By Email Address")
                             .font(.system(size: 16, weight: .medium))
@@ -116,7 +116,7 @@ struct ForgotPasswordView: View {
 
                     Spacer()
 
-                    // NavigationLink to LoginView
+                    
                     NavigationLink(
                         destination: LoginView(),
                         isActive: $navigateToLogin,
@@ -129,7 +129,7 @@ struct ForgotPasswordView: View {
                 .blur(radius: showPasswordResetModal ? 2 : 0)
                 .disabled(showPasswordResetModal)
 
-                // Modal Overlay
+            
                 if showPasswordResetModal {
                     Color.black.opacity(0.4)
                         .ignoresSafeArea()
@@ -147,7 +147,6 @@ struct ForgotPasswordView: View {
         }
     }
 
-    // MARK: - Actions
     private func searchByUsername() {
         print("Searching by username: \(username)")
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -163,7 +162,7 @@ struct ForgotPasswordView: View {
     }
 }
 
-// MARK: - Password Reset Modal
+
 struct PasswordResetModal: View {
     @Binding var isPresented: Bool
     var onContinue: () -> Void
@@ -209,7 +208,7 @@ struct PasswordResetModal: View {
 
 
 
-// MARK: - Preview
+
 struct ForgotPasswordView_Previews: PreviewProvider {
     static var previews: some View {
         ForgotPasswordView()

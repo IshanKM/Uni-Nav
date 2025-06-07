@@ -123,7 +123,7 @@ struct LoginView: View {
                                 }
                             }
 
-                            // ✅ Hidden NavigationLink triggered by state
+         
                             NavigationLink(
                                 destination: MainTabView(),
                                 isActive: $navigateToHome,
@@ -131,8 +131,7 @@ struct LoginView: View {
                             )
 
                             Button(action: {
-                                // Handle login logic here
-                                // On success:
+                                
                                 navigateToHome = true
                             }) {
                                 Text("Log In")
@@ -159,7 +158,7 @@ struct LoginView: View {
                             .padding(.vertical, 8)
 
                             Button(action: {
-                                // Handle guest login
+                            
                             }) {
                                 HStack(spacing: 12) {
                                     Image(systemName: "person.circle")
