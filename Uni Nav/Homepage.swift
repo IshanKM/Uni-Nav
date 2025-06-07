@@ -293,26 +293,6 @@ struct EventsContent: View {
     }
 }
 
-// ChatView Component
-struct ChatView: View {
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("Chat")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                Text("Chat functionality coming soon...")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .padding()
-                
-                Spacer()
-            }
-            .navigationTitle("Chat")
-        }
-    }
-}
 
 // AccountView Component
 struct AccountView: View {
