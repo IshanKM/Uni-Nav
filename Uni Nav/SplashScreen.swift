@@ -77,7 +77,7 @@ struct SplashScreenView: View {
     private func startLoading() {
         Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
             if progress < 1.0 {
-                progress = min(progress + 0.02, 1.0) // Clamp at 1.0
+                progress = min(progress + 0.04, 1.0) // Clamp at 1.0
             } else {
                 timer.invalidate()
                 withAnimation {
