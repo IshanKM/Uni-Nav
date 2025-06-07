@@ -6,11 +6,20 @@ struct LoginView: View {
     @State private var isPasswordVisible: Bool = false
     @State private var rememberMe: Bool = false
     @State private var navigateToHome = false
+    
+    // Animation states
+    @State private var headerOpacity: Double = 0
+    @State private var headerOffset: CGFloat = -100
+    @State private var formOpacity: Double = 0
+    @State private var formOffset: CGFloat = 100
+    @State private var buttonScale: CGFloat = 0.8
+    @State private var buttonOpacity: Double = 0
 
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
                 VStack(spacing: 0) {
+                    // Animated Header
                     ZStack {
                         LinearGradient(
                             gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
@@ -45,9 +54,12 @@ struct LoginView: View {
                         }
                         .padding(.top, 60)
                         .padding(.bottom, 40)
+                        .opacity(headerOpacity)
+                        .offset(y: headerOffset)
                     }
                     .frame(height: geometry.size.height * 0.35)
 
+                    // Animated Form Section
                     VStack(spacing: 0) {
                         RoundedRectangle(cornerRadius: 25)
                             .fill(Color.white)
@@ -61,6 +73,7 @@ struct LoginView: View {
                                 .foregroundColor(.black)
                                 .padding(.top, -25)
 
+                            // Animated Username Field
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Username")
                                     .font(.subheadline)
@@ -73,7 +86,11 @@ struct LoginView: View {
                                     .background(Color.gray.opacity(0.1))
                                     .cornerRadius(8)
                             }
+                            .opacity(formOpacity)
+                            .offset(y: formOffset)
+                            .animation(.easeOut(duration: 0.6).delay(0.1), value: formOpacity)
 
+                            // Animated Password Field
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Password")
                                     .font(.subheadline)
@@ -89,7 +106,9 @@ struct LoginView: View {
                                     }
 
                                     Button(action: {
-                                        isPasswordVisible.toggle()
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            isPasswordVisible.toggle()
+                                        }
                                     }) {
                                         Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
                                             .foregroundColor(.gray)
@@ -100,14 +119,21 @@ struct LoginView: View {
                                 .background(Color.gray.opacity(0.1))
                                 .cornerRadius(8)
                             }
+                            .opacity(formOpacity)
+                            .offset(y: formOffset)
+                            .animation(.easeOut(duration: 0.6).delay(0.2), value: formOpacity)
 
+                            // Animated Remember Me & Forgot Password
                             HStack {
                                 Button(action: {
-                                    rememberMe.toggle()
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                                        rememberMe.toggle()
+                                    }
                                 }) {
                                     HStack(spacing: 8) {
                                         Image(systemName: rememberMe ? "checkmark.square.fill" : "square")
                                             .foregroundColor(rememberMe ? .blue : .gray)
+                                            .scaleEffect(rememberMe ? 1.1 : 1.0)
                                         Text("Remember me")
                                             .font(.subheadline)
                                             .foregroundColor(.gray)
@@ -122,27 +148,49 @@ struct LoginView: View {
                                         .foregroundColor(.blue)
                                 }
                             }
+                            .opacity(formOpacity)
+                            .offset(y: formOffset)
+                            .animation(.easeOut(duration: 0.6).delay(0.3), value: formOpacity)
 
-         
                             NavigationLink(
                                 destination: MainTabView(),
                                 isActive: $navigateToHome,
                                 label: { EmptyView() }
                             )
 
+                            // Animated Login Button
                             Button(action: {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                                    buttonScale = 0.95
+                                }
                                 
-                                navigateToHome = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                                        buttonScale = 1.0
+                                    }
+                                    navigateToHome = true
+                                }
                             }) {
                                 Text("Log In")
                                     .font(.headline)
                                     .foregroundColor(.white)
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, 16)
-                                    .background(Color.blue)
+                                    .background(
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                    )
                                     .cornerRadius(12)
+                                    .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
                             }
+                            .scaleEffect(buttonScale)
+                            .opacity(buttonOpacity)
+                            .animation(.easeOut(duration: 0.6).delay(0.4), value: buttonOpacity)
 
+                            // Animated Divider
                             HStack {
                                 Rectangle()
                                     .fill(Color.gray.opacity(0.3))
@@ -156,9 +204,15 @@ struct LoginView: View {
                                     .frame(height: 1)
                             }
                             .padding(.vertical, 8)
+                            .opacity(formOpacity)
+                            .offset(y: formOffset)
+                            .animation(.easeOut(duration: 0.6).delay(0.5), value: formOpacity)
 
+                            // Animated Guest Button
                             Button(action: {
-                            
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                                    // Add guest login functionality
+                                }
                             }) {
                                 HStack(spacing: 12) {
                                     Image(systemName: "person.circle")
@@ -171,7 +225,14 @@ struct LoginView: View {
                                 .padding(.vertical, 16)
                                 .background(Color.gray.opacity(0.1))
                                 .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                )
                             }
+                            .opacity(formOpacity)
+                            .offset(y: formOffset)
+                            .animation(.easeOut(duration: 0.6).delay(0.6), value: formOpacity)
 
                             Spacer()
                         }
@@ -181,12 +242,33 @@ struct LoginView: View {
                 }
             }
             .ignoresSafeArea(.all, edges: .top)
+            .onAppear {
+                startLoginAnimations()
+            }
+        }
+        .navigationBarHidden(true)
+    }
+    
+    private func startLoginAnimations() {
+        // Header animation
+        withAnimation(.easeOut(duration: 0.8)) {
+            headerOpacity = 1.0
+            headerOffset = 0
+        }
+        
+        // Form elements animation with staggered delays
+        withAnimation(.easeOut(duration: 0.6).delay(0.3)) {
+            formOpacity = 1.0
+            formOffset = 0
+        }
+        
+        // Button animation
+        withAnimation(.easeOut(duration: 0.6).delay(0.4)) {
+            buttonOpacity = 1.0
+            buttonScale = 1.0
         }
     }
 }
-
-
-
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {

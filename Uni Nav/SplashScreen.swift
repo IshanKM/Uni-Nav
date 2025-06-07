@@ -1,13 +1,23 @@
 import SwiftUI
 
 struct SplashScreenView: View {
+    
     @State private var progress: Double = 0.0
     @State private var isActive = false
+    @State private var logoScale: CGFloat = 0.5
+    @State private var logoOpacity: Double = 0
+    @State private var textOpacity: Double = 0
+    @State private var textOffset: CGFloat = 50
+    @State private var progressOpacity: Double = 0
 
     var body: some View {
         NavigationStack {
             if isActive {
                 LoginView()
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
             } else {
                 ZStack {
                     LinearGradient(
@@ -21,53 +31,93 @@ struct SplashScreenView: View {
                         Spacer()
                         
                         VStack(spacing: 20) {
+                            // Clean Logo Animation (no rotation)
                             ZStack {
                                 Circle()
                                     .fill(Color.white)
                                     .frame(width: 120, height: 120)
                                     .shadow(radius: 10)
+                                    .scaleEffect(logoScale)
+                                    .opacity(logoOpacity)
                                 
                                 Image("logo")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 120, height: 120)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 120, height: 120)
+                                    .scaleEffect(logoScale)
+                                    .opacity(logoOpacity)
                             }
 
+                            // Animated Text
                             VStack(spacing: 8) {
                                 Text("Campus Navigator")
                                     .font(.title2)
                                     .fontWeight(.light)
                                     .foregroundColor(.white)
+                                    .opacity(textOpacity)
+                                    .offset(y: textOffset)
 
                                 Text("Explore Navigate Success")
                                     .font(.caption)
                                     .foregroundColor(.white.opacity(0.8))
+                                    .opacity(textOpacity)
+                                    .offset(y: textOffset)
                             }
                         }
 
                         Spacer()
 
+                        // Animated Footer
                         VStack(spacing: 16) {
                             VStack(spacing: 4) {
                                 Text("Copyright © 2024 NAVI University")
                                     .font(.caption2)
                                     .foregroundColor(.white.opacity(0.7))
+                                    .opacity(progressOpacity)
                                 Text("All Rights Reserved")
                                     .font(.caption2)
                                     .foregroundColor(.white.opacity(0.7))
+                                    .opacity(progressOpacity)
                             }
 
                             ProgressView(value: progress, total: 1.0)
                                 .progressViewStyle(LinearProgressViewStyle(tint: .white))
                                 .frame(width: 120)
+                                .opacity(progressOpacity)
+                                .scaleEffect(x: progressOpacity, y: 1.0)
                         }
                         .padding(.bottom, 50)
                     }
                 }
                 .onAppear {
-                    startLoading()
+                    startAnimations()
                 }
             }
+        }
+        .animation(.easeInOut(duration: 0.8), value: isActive)
+    }
+
+    private func startAnimations() {
+        // Clean logo animation (scale + fade only)
+        withAnimation(.easeOut(duration: 0.8)) {
+            logoOpacity = 1.0
+            logoScale = 1.0
+        }
+        
+        // Text animations with delay
+        withAnimation(.easeOut(duration: 0.6).delay(0.3)) {
+            textOpacity = 1.0
+            textOffset = 0
+        }
+        
+        // Progress bar animation with delay
+        withAnimation(.easeOut(duration: 0.5).delay(0.6)) {
+            progressOpacity = 1.0
+        }
+        
+        // Start loading progress
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            startLoading()
         }
     }
 
@@ -77,13 +127,12 @@ struct SplashScreenView: View {
                 progress = min(progress + 0.04, 1.0)
             } else {
                 timer.invalidate()
-                withAnimation {
+                withAnimation(.easeInOut(duration: 0.5)) {
                     isActive = true
                 }
             }
         }
     }
-
 }
 
 #Preview {
