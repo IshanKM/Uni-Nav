@@ -7,7 +7,6 @@ struct LoginView: View {
     @State private var rememberMe: Bool = false
     @State private var navigateToHome = false
     
-    // Animation states
     @State private var headerOpacity: Double = 0
     @State private var headerOffset: CGFloat = -100
     @State private var formOpacity: Double = 0
@@ -19,7 +18,6 @@ struct LoginView: View {
         NavigationView {
             GeometryReader { geometry in
                 VStack(spacing: 0) {
-                   
                     ZStack {
                         LinearGradient(
                             gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
@@ -59,7 +57,6 @@ struct LoginView: View {
                     }
                     .frame(height: geometry.size.height * 0.35)
 
-                    // Animated Form Section
                     VStack(spacing: 0) {
                         RoundedRectangle(cornerRadius: 25)
                             .fill(Color.white)
@@ -73,7 +70,6 @@ struct LoginView: View {
                                 .foregroundColor(.black)
                                 .padding(.top, -25)
 
-                            // Animated Username Field
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Username")
                                     .font(.subheadline)
@@ -90,7 +86,6 @@ struct LoginView: View {
                             .offset(y: formOffset)
                             .animation(.easeOut(duration: 0.6).delay(0.1), value: formOpacity)
 
-                            // Animated Password Field
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Password")
                                     .font(.subheadline)
@@ -123,7 +118,6 @@ struct LoginView: View {
                             .offset(y: formOffset)
                             .animation(.easeOut(duration: 0.6).delay(0.2), value: formOpacity)
 
-                            // Animated Remember Me & Forgot Password
                             HStack {
                                 Button(action: {
                                     withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
@@ -152,18 +146,18 @@ struct LoginView: View {
                             .offset(y: formOffset)
                             .animation(.easeOut(duration: 0.6).delay(0.3), value: formOpacity)
 
+                       
                             NavigationLink(
                                 destination: MainTabView(),
                                 isActive: $navigateToHome,
                                 label: { EmptyView() }
                             )
 
-                            // Animated Login Button
                             Button(action: {
                                 withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                                     buttonScale = 0.95
                                 }
-                                
+
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                                         buttonScale = 1.0
@@ -190,7 +184,6 @@ struct LoginView: View {
                             .opacity(buttonOpacity)
                             .animation(.easeOut(duration: 0.6).delay(0.4), value: buttonOpacity)
 
-                      
                             HStack {
                                 Rectangle()
                                     .fill(Color.gray.opacity(0.3))
@@ -208,11 +201,9 @@ struct LoginView: View {
                             .offset(y: formOffset)
                             .animation(.easeOut(duration: 0.6).delay(0.5), value: formOpacity)
 
-                         
+                           
                             Button(action: {
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                                    
-                                }
+                                navigateToHome = true
                             }) {
                                 HStack(spacing: 12) {
                                     Image("guest")
@@ -250,21 +241,16 @@ struct LoginView: View {
         }
         .navigationBarHidden(true)
     }
-    
+
     private func startLoginAnimations() {
-        // Header animation
         withAnimation(.easeOut(duration: 0.8)) {
             headerOpacity = 1.0
             headerOffset = 0
         }
-        
-        // Form elements animation with staggered delays
         withAnimation(.easeOut(duration: 0.6).delay(0.3)) {
             formOpacity = 1.0
             formOffset = 0
         }
-        
-        // Button animation
         withAnimation(.easeOut(duration: 0.6).delay(0.4)) {
             buttonOpacity = 1.0
             buttonScale = 1.0
