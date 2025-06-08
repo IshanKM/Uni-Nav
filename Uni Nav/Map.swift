@@ -1,10 +1,8 @@
-
 import SwiftUI
 import WebKit
 
 struct CampusMapView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State private var selectedFloor = 0
     @State private var searchText = ""
     @State private var selectedRoom: RoomInfo?
     @State private var showRoomDetails = false
@@ -12,9 +10,6 @@ struct CampusMapView: View {
     @State private var offset = CGSize.zero
     @State private var svgSize: CGSize = .zero
     
-    let floors = ["G", "1", "2"]
-    
-
     let roomDatabase: [String: RoomInfo] = [
         "Cafateria": RoomInfo(
             id: "Cafateria",
@@ -127,7 +122,7 @@ struct CampusMapView: View {
             Color.white.ignoresSafeArea()
             
             VStack(spacing: 0) {
-           
+                
                 HStack {
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
@@ -147,7 +142,7 @@ struct CampusMapView: View {
                     Spacer()
                     
                     Button(action: {
-                      
+                        
                         withAnimation(.easeInOut(duration: 0.5)) {
                             scale = 1.0
                             offset = .zero
@@ -162,12 +157,12 @@ struct CampusMapView: View {
                 .padding(.vertical, 15)
                 .background(Color.white)
                 
-          
+               
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.gray)
                     
-                    TextField("Search rooms...", text: $searchText)
+                    TextField("Search Places...", text: $searchText)
                         .font(.subheadline)
                         .onSubmit {
                             searchForRoom()
@@ -191,11 +186,11 @@ struct CampusMapView: View {
                 .padding(.bottom, 16)
                 .background(Color.white)
                 
-       
+                
                 ZStack {
                     GeometryReader { geometry in
                         ZStack {
-                          
+                           
                             EnhancedSVGWebView(
                                 svgFileName: "Ground-flow",
                                 selectedRoom: $selectedRoom,
@@ -206,7 +201,7 @@ struct CampusMapView: View {
                             .offset(offset)
                             .gesture(
                                 SimultaneousGesture(
-                                
+                                   
                                     MagnificationGesture()
                                         .onChanged { value in
                                             let newScale = scale * value
@@ -219,15 +214,15 @@ struct CampusMapView: View {
                                             offset = value.translation
                                         }
                                         .onEnded { value in
-                                          
+                                           
                                             offset = value.translation
                                         }
                                 )
                             )
                             
-                          
-                            if let selectedRoom = selectedRoom {
                             
+                            if let selectedRoom = selectedRoom {
+                                
                                 RoomMarkerView(room: selectedRoom)
                                     .position(
                                         x: (selectedRoom.position.x * geometry.size.width) + offset.width,
@@ -238,40 +233,7 @@ struct CampusMapView: View {
                         }
                     }
                     
-                  
-                    VStack {
-                        Spacer()
-                        
-                        HStack {
-                            Spacer()
-                            
-                            HStack(spacing: 8) {
-                                ForEach(0..<floors.count, id: \.self) { index in
-                                    Button(action: {
-                                        selectedFloor = index
-                                        selectedRoom = nil
-                                        withAnimation(.easeInOut(duration: 0.3)) {
-                                            scale = 1.0
-                                            offset = .zero
-                                        }
-                                    }) {
-                                        Text(floors[index])
-                                            .font(.headline)
-                                            .fontWeight(.medium)
-                                            .foregroundColor(selectedFloor == index ? .white : .gray)
-                                            .frame(width: 44, height: 44)
-                                            .background(selectedFloor == index ? Color.blue : Color.white)
-                                            .cornerRadius(22)
-                                            .shadow(color: .gray.opacity(0.3), radius: 3, x: 0, y: 2)
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 20)
-                        }
-                        .padding(.bottom, selectedRoom != nil ? 200 : 100)
-                    }
                     
-                  
                     VStack {
                         HStack {
                             Spacer()
@@ -313,12 +275,39 @@ struct CampusMapView: View {
                         }
                         
                         Spacer()
+                        
+                        
+                        HStack {
+                            Spacer()
+                            
+                            Button(action: {
+                                openNIBMLocationInGoogleMaps()
+                            }) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "map.fill")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.white)
+                                    
+                                    Text("Open NIBM Location with Google Map")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.white)
+                                }
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 14)
+                                .background(Color.blue)
+                                .cornerRadius(25)
+                                .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(.bottom, selectedRoom != nil ? 200 : 30)
                     }
                     .padding(.top, 20)
                 }
             }
             
-       
+            
             if let room = selectedRoom {
                 VStack {
                     Spacer()
@@ -329,7 +318,7 @@ struct CampusMapView: View {
                             showRoomDetails = true
                         },
                         onDirectionsClick: {
-                        
+                            
                             print("Directions to \(room.name)")
                         },
                         onClose: {
@@ -358,21 +347,18 @@ struct CampusMapView: View {
         
         guard !searchQuery.isEmpty else { return }
         
-      
+        
         for (_, room) in roomDatabase {
             if room.searchTerms.contains(where: { $0.contains(searchQuery) }) ||
                room.name.lowercased().contains(searchQuery) {
                 
-                selectedFloor = room.floor
                 
-      
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     withAnimation(.spring(response: 0.8, dampingFraction: 0.8)) {
                         selectedRoom = room
                         
-             
                         scale = 2.0
-      
+                        
                         offset = CGSize(
                             width: -room.position.x * UIScreen.main.bounds.width + UIScreen.main.bounds.width/4,
                             height: -room.position.y * UIScreen.main.bounds.height + UIScreen.main.bounds.height/4
@@ -383,22 +369,31 @@ struct CampusMapView: View {
             }
         }
     }
+    
+    private func openNIBMLocationInGoogleMaps() {
+        let googleMapsURL = "https://maps.app.goo.gl/ko2FMVdQbW8rS8448"
+        
+        if let url = URL(string: googleMapsURL) {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+    }
 }
-
 
 struct RoomMarkerView: View {
     let room: RoomInfo
     
     var body: some View {
         VStack(spacing: 0) {
-    
+            
             Circle()
                 .fill(Color.red.opacity(0.3))
                 .frame(width: 40, height: 40)
                 .scaleEffect(1.5)
                 .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: UUID())
             
-       
+            
             Circle()
                 .fill(Color.red)
                 .frame(width: 20, height: 20)
@@ -410,7 +405,6 @@ struct RoomMarkerView: View {
         }
     }
 }
-
 
 struct EnhancedSVGWebView: UIViewRepresentable {
     let svgFileName: String
@@ -426,7 +420,7 @@ struct EnhancedSVGWebView: UIViewRepresentable {
         webView.scrollView.bounces = false
         webView.navigationDelegate = context.coordinator
         
- 
+        // Disable built-in zoom and pan
         webView.scrollView.pinchGestureRecognizer?.isEnabled = false
         webView.scrollView.panGestureRecognizer.isEnabled = false
         
@@ -446,24 +440,24 @@ struct EnhancedSVGWebView: UIViewRepresentable {
         if let svgPath = Bundle.main.path(forResource: svgFileName, ofType: "svg"),
            let svgContent = try? String(contentsOfFile: svgPath) {
             
-     
+            // Generate click handlers for each room
             let roomClickHandlers = roomDatabase.keys.map { roomId in
                 """
                 document.getElementById('\(roomId)')?.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     
-                    // Get element position
+                    
                     const element = document.getElementById('\(roomId)');
                     if (element) {
                         const rect = element.getBoundingClientRect();
                         const svgRect = document.querySelector('svg').getBoundingClientRect();
                         
-                        // Calculate normalized position (0-1)
+                      
                         const normalizedX = (rect.left + rect.width/2) / svgRect.width;
                         const normalizedY = (rect.top + rect.height/2) / svgRect.height;
                         
-                        // Send position and room ID
+                        
                         const data = {
                             id: '\(roomId)',
                             x: normalizedX,
@@ -514,7 +508,7 @@ struct EnhancedSVGWebView: UIViewRepresentable {
             <body>
                 \(svgContent)
                 <script>
-                    // Get SVG size
+                    
                     const svgElement = document.querySelector('svg');
                     if (svgElement) {
                         const svgRect = svgElement.getBoundingClientRect();
@@ -524,10 +518,8 @@ struct EnhancedSVGWebView: UIViewRepresentable {
                         }));
                     }
                 
-                    // Add click handlers for all rooms
                     \(roomClickHandlers)
                     
-                    // Prevent default behaviors that might interfere
                     document.addEventListener('touchstart', function(e) {
                         // Allow single touches for clicking
                         if (e.touches.length === 1) {
@@ -574,13 +566,13 @@ struct EnhancedSVGWebView: UIViewRepresentable {
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             if message.name == "roomClicked" {
                 if let jsonString = message.body as? String {
-
+                    // Try to parse as JSON with position data
                     if let data = jsonString.data(using: .utf8),
                        let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                        let roomId = json["id"] as? String,
                        let room = parent.roomDatabase[roomId] {
                         
-        
+                 
                         var updatedRoom = room
                         if let x = json["x"] as? CGFloat, let y = json["y"] as? CGFloat {
                             updatedRoom = RoomInfo(
@@ -600,7 +592,7 @@ struct EnhancedSVGWebView: UIViewRepresentable {
                         }
                     } else if let roomId = message.body as? String,
                               let room = parent.roomDatabase[roomId] {
-         
+              
                         DispatchQueue.main.async {
                             withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
                                 self.parent.selectedRoom = room
@@ -624,7 +616,6 @@ struct EnhancedSVGWebView: UIViewRepresentable {
     }
 }
 
-
 struct RoomInfo: Identifiable, Equatable {
     let id: String
     let name: String
@@ -637,7 +628,6 @@ struct RoomInfo: Identifiable, Equatable {
         lhs.id == rhs.id
     }
 }
-
 
 struct EnhancedRoomDetailsPopup: View {
     let room: RoomInfo
@@ -682,25 +672,11 @@ struct EnhancedRoomDetailsPopup: View {
                     }
                 }
                 
-          
+      
                 HStack(spacing: 12) {
-                    Button(action: onDirectionsClick) {
-                        HStack {
-                            Image(systemName: "location.circle.fill")
-                            Text("Directions")
-                        }
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundColor(.blue)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(Color.blue.opacity(0.1))
-                        .cornerRadius(8)
-                    }
-                    
                     Button(action: onDetailsClick) {
                         HStack {
-                            Image(systemName: "info.circle")
+                            Image(systemName: "info.location")
                             Text("Details")
                         }
                         .font(.subheadline)
@@ -708,7 +684,7 @@ struct EnhancedRoomDetailsPopup: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
-                        .background(Color.red)
+                        .background(Color.blue)
                         .cornerRadius(8)
                     }
                 }
@@ -730,7 +706,7 @@ struct RoomDetailView: View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    // Header
+             
                     VStack(alignment: .leading, spacing: 8) {
                         Text(room.name)
                             .font(.largeTitle)
@@ -747,7 +723,7 @@ struct RoomDetailView: View {
                     
                     Divider()
                     
-                   
+                    // Details
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Room Information")
                             .font(.headline)
@@ -822,7 +798,6 @@ struct DetailRow: View {
     }
 }
 
-
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners))
@@ -842,8 +817,6 @@ struct RoundedCorner: Shape {
         return Path(path.cgPath)
     }
 }
-
-
 
 struct CampusMapView_Previews: PreviewProvider {
     static var previews: some View {

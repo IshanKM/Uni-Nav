@@ -31,7 +31,7 @@ struct SplashScreenView: View {
                         Spacer()
                         
                         VStack(spacing: 20) {
-                            // Clean Logo Animation (no rotation)
+                    
                             ZStack {
                                 Circle()
                                     .fill(Color.white)
@@ -70,7 +70,7 @@ struct SplashScreenView: View {
                         // Animated Footer
                         VStack(spacing: 16) {
                             VStack(spacing: 4) {
-                                Text("Copyright © 2024 NAVI University")
+                                Text("Copyright © 2025 NIBM Campus")
                                     .font(.caption2)
                                     .foregroundColor(.white.opacity(0.7))
                                     .opacity(progressOpacity)

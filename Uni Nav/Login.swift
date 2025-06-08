@@ -19,7 +19,7 @@ struct LoginView: View {
         NavigationView {
             GeometryReader { geometry in
                 VStack(spacing: 0) {
-                    // Animated Header
+                   
                     ZStack {
                         LinearGradient(
                             gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
@@ -190,7 +190,7 @@ struct LoginView: View {
                             .opacity(buttonOpacity)
                             .animation(.easeOut(duration: 0.6).delay(0.4), value: buttonOpacity)
 
-                            // Animated Divider
+                      
                             HStack {
                                 Rectangle()
                                     .fill(Color.gray.opacity(0.3))
@@ -208,15 +208,17 @@ struct LoginView: View {
                             .offset(y: formOffset)
                             .animation(.easeOut(duration: 0.6).delay(0.5), value: formOpacity)
 
-                            // Animated Guest Button
+                         
                             Button(action: {
                                 withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                                    // Add guest login functionality
+                                    
                                 }
                             }) {
                                 HStack(spacing: 12) {
-                                    Image(systemName: "person.circle")
-                                        .foregroundColor(.gray)
+                                    Image("guest")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 20, height: 20)
                                     Text("Continue as Guest")
                                         .font(.headline)
                                         .foregroundColor(.black)
