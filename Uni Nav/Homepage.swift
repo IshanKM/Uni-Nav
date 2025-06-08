@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 struct MainTabView: View {
     @State private var selectedTab = 0
     
@@ -190,24 +191,24 @@ struct HomeView: View {
     }
 }
 
-
-
 struct AnnouncementCard: View {
     var body: some View {
+        let announcement = announcementItems[0]
+        
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Exam Alert")
+                Text(announcement.title)
                     .font(.headline)
                     .fontWeight(.medium)
                 
                 Spacer()
                 
-                Text("june 4")
+                Text(announcement.date)
                     .font(.caption)
                     .foregroundColor(.gray)
             }
             
-            Text("Web Api Development Exam time added. please check lms for more details.")
+            Text(announcement.description)
                 .font(.caption)
                 .foregroundColor(.gray)
                 .lineLimit(nil)
@@ -219,23 +220,26 @@ struct AnnouncementCard: View {
         .padding(.horizontal, 20)
     }
 }
+
 
 struct EventsContent: View {
     var body: some View {
+        let event = eventItems[0]
+        
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("2025 Career Fair")
+                Text(event.title)
                     .font(.headline)
                     .fontWeight(.medium)
                 
                 Spacer()
                 
-                Text("June 05")
+                Text(event.date)
                     .font(.caption)
                     .foregroundColor(.gray)
             }
             
-            Text("Join this 1st saturday in NIBM premises for valuable opportunities. please contact program office for more info.")
+            Text(event.description)
                 .font(.caption)
                 .foregroundColor(.gray)
                 .lineLimit(nil)
@@ -247,10 +251,6 @@ struct EventsContent: View {
         .padding(.horizontal, 20)
     }
 }
-
-
-
-
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
