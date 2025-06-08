@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct MainTabView: View {
@@ -6,7 +5,6 @@ struct MainTabView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-    
             HomeView()
                 .tabItem {
                     Image(systemName: selectedTab == 0 ? "house.fill" : "house")
@@ -14,7 +12,6 @@ struct MainTabView: View {
                 }
                 .tag(0)
             
-  
             ChatView()
                 .tabItem {
                     Image(systemName: selectedTab == 1 ? "message.fill" : "message")
@@ -22,7 +19,6 @@ struct MainTabView: View {
                 }
                 .tag(1)
             
- 
             AccountView()
                 .tabItem {
                     Image(systemName: selectedTab == 2 ? "person.fill" : "person")
@@ -36,18 +32,27 @@ struct MainTabView: View {
 
 struct HomeView: View {
     @State private var selectedAnnouncementTab = "Announcement"
+    @State private var selectedEventTab = "Event"
+
+    private let userBatch = "23.1P Batch"
+    
+    private var todaysLectures: [TimetableItem] {
+        return timetableItems.filter { item in
+            item.batch == userBatch
+        }
+    }
     
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-  
+                    
                     HStack {
                         HStack(spacing: 8) {
-                            Image(systemName: "globe")
-                                .foregroundColor(.blue)
-                                .font(.title2)
-                            
+                            Image("logo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 40)
                             Text("Hi, S.G.I.K !")
                                 .font(.title2)
                                 .fontWeight(.medium)
@@ -58,9 +63,7 @@ struct HomeView: View {
                         
                         Spacer()
                         
-                        Button(action: {
-         
-                        }) {
+                        NavigationLink(destination: NotificationView()) {
                             Image(systemName: "bell.fill")
                                 .foregroundColor(.black)
                                 .font(.title2)
@@ -69,7 +72,8 @@ struct HomeView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 10)
                     
- 
+                    Spacer()
+                    
                     VStack(spacing: 16) {
                         HStack {
                             Text("Today's TimeTable")
@@ -79,60 +83,53 @@ struct HomeView: View {
                             Spacer()
                             
                             NavigationLink(destination: TimetableListView()) {
-                                        Text("All")
-                                            .foregroundColor(.gray)
-                                            .font(.subheadline)
+                                Text("All")
+                                    .foregroundColor(.gray)
+                                    .font(.subheadline)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                 
+                       
+                        if userBatch.isEmpty {
+                           
+                            LoginPromptCard()
+                        } else if todaysLectures.isEmpty {
+                           
+                            VStack(spacing: 12) {
+                                Image(systemName: "calendar.badge.exclamationmark")
+                                    .font(.system(size: 40))
+                                    .foregroundColor(.gray.opacity(0.6))
+                                
+                                Text("No lectures scheduled for today")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                
+                                Text("Batch: \(userBatch)")
+                                    .font(.caption)
+                                    .foregroundColor(.gray.opacity(0.8))
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 40)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 2)
+                            .padding(.horizontal, 20)
+                        } else {
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 16) {
+                                    ForEach(todaysLectures, id: \.subject) { lecture in
+                                        NavigationLink(destination: CampusMapView()) {
+                                            TimetableCard(item: lecture)
+                                                .frame(width: 350)
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
                                     }
-                        }
-                        .padding(.horizontal, 20)
-                        
-  
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Web API Development")
-                                .font(.headline)
-                                .fontWeight(.medium)
-                            
-                            HStack {
-                                Image(systemName: "clock")
-                                    .foregroundColor(.gray)
-                                    .font(.caption)
-                                Text("09:00 - 11:00  and 12:00 - 3:30")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            HStack {
-                                Image(systemName: "location")
-                                    .foregroundColor(.gray)
-                                    .font(.caption)
-                                Text("Lecture Hall 01")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            HStack {
-                                Image(systemName: "person.2")
-                                    .foregroundColor(.gray)
-                                    .font(.caption)
-                                Text("23.1 Batch")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            Spacer()
-                            
-                            HStack {
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.gray)
-                                    .font(.caption)
+                                }
+                                .padding(.horizontal, 20)
                             }
                         }
-                        .padding(20)
-                        .background(Color.white)
-                        .cornerRadius(12)
-                        .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 2)
-                        .padding(.horizontal, 20)
                     }
                     
                     LazyVGrid(columns: [
@@ -148,12 +145,15 @@ struct HomeView: View {
                         NavigationLink(destination: CampusMapView()) {
                             NavigationCard(title: "Campus Map", imageName: "map_logo")
                         }
-                        NavigationLink(destination: PlacesView()) {
-                            NavigationCard(title: "Places", imageName: "places_logo")
+                        NavigationLink(destination: AcademicStaffView()) {
+                            NavigationCard(title: "Academic Staff", imageName: "acedemicStuff")
                         }
                     }
                     .padding(.horizontal, 20)
 
+                    Spacer()
+                    
+                    
                     VStack(spacing: 16) {
                         HStack(spacing: 40) {
                             TabButton(
@@ -174,7 +174,6 @@ struct HomeView: View {
                         }
                         .padding(.horizontal, 20)
                         
-                        // Content based on selected tab
                         if selectedAnnouncementTab == "Announcement" {
                             AnnouncementCard()
                         } else {
@@ -191,17 +190,19 @@ struct HomeView: View {
     }
 }
 
+
+
+
 struct NavigationCard: View {
     let title: String
     let imageName: String
 
     var body: some View {
         VStack(spacing: 12) {
-            // Image from Assets folder
             Image(imageName)
                 .resizable()
                 .scaledToFit()
-                .frame(height: 100)
+                .frame(height: 130)
                 .cornerRadius(12)
 
             Text(title)
@@ -217,7 +218,6 @@ struct NavigationCard: View {
     }
 }
 
-
 struct TabButton: View {
     let title: String
     let isSelected: Bool
@@ -229,11 +229,11 @@ struct TabButton: View {
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(isSelected ? .medium : .regular)
-                    .foregroundColor(isSelected ? .purple : .gray)
+                    .foregroundColor(isSelected ? .blue : .gray)
                 
                 if isSelected {
                     Rectangle()
-                        .fill(Color.purple)
+                        .fill(Color.blue)
                         .frame(width: 60, height: 2)
                         .cornerRadius(1)
                 }
@@ -246,18 +246,46 @@ struct AnnouncementCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("FBISE")
+                Text("Exam Alert")
                     .font(.headline)
                     .fontWeight(.medium)
                 
                 Spacer()
                 
-                Text("May 01")
+                Text("june 4")
                     .font(.caption)
                     .foregroundColor(.gray)
             }
             
-            Text("The Federal Board of Intermediate and Secondary Education (FBISE) has officially announced the date for the results of the Secondary School Certificate (SSC) Part I & II 1st Annual Examinations.")
+            Text("Web Api Development Exam time added. please check lms for more details.")
+                .font(.caption)
+                .foregroundColor(.gray)
+                .lineLimit(nil)
+        }
+        .padding(20)
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 2)
+        .padding(.horizontal, 20)
+    }
+}
+
+struct EventsContent: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("2025 Career Fair")
+                    .font(.headline)
+                    .fontWeight(.medium)
+                
+                Spacer()
+                
+                Text("June 05")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            
+            Text("Join this 1st saturday in NIBM premises for valuable opportunities. please contact program office for more info.")
                 .font(.caption)
                 .foregroundColor(.gray)
                 .lineLimit(nil)
@@ -271,106 +299,7 @@ struct AnnouncementCard: View {
 }
 
 
-struct EventsContent: View {
-    var body: some View {
-        VStack {
-            Text("No events available")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-                .padding(40)
-        }
-        .frame(maxWidth: .infinity)
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 2)
-        .padding(.horizontal, 20)
-    }
-}
 
-
-struct AccountView: View {
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-
-                VStack(spacing: 16) {
-                    Circle()
-                        .fill(Color.blue.opacity(0.2))
-                        .frame(width: 100, height: 100)
-                        .overlay(
-                            Text("S.G.I.K")
-                                .font(.title2)
-                                .fontWeight(.medium)
-                                .foregroundColor(.blue)
-                        )
-                    
-                    Text("S.G.I.K")
-                        .font(.title2)
-                        .fontWeight(.medium)
-                    
-                    Text("Student ID: COBSCCOMP4231P-021")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                }
-                .padding(.top, 40)
-
-                VStack(spacing: 0) {
-                    AccountRow(icon: "person.circle", title: "Profile Settings")
-                    AccountRow(icon: "bell", title: "Notifications")
-                    AccountRow(icon: "lock", title: "Privacy & Security")
-                    AccountRow(icon: "questionmark.circle", title: "Help & Support")
-                    AccountRow(icon: "rectangle.portrait.and.arrow.right", title: "Logout", isDestructive: true)
-                }
-                .background(Color.white)
-                .cornerRadius(12)
-                .padding(.horizontal, 20)
-                
-                Spacer()
-            }
-            .background(Color.gray.opacity(0.05))
-            .navigationTitle("Account")
-        }
-    }
-}
-
-
-struct AccountRow: View {
-    let icon: String
-    let title: String
-    var isDestructive: Bool = false
-    
-    var body: some View {
-        Button(action: {
-
-        }) {
-            HStack(spacing: 16) {
-                Image(systemName: icon)
-                    .foregroundColor(isDestructive ? .red : .gray)
-                    .font(.title3)
-                    .frame(width: 24)
-                
-                Text(title)
-                    .font(.subheadline)
-                    .foregroundColor(isDestructive ? .red : .black)
-                
-                Spacer()
-                
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
-                    .font(.caption)
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
-        }
-        .background(Color.white)
-    }
-}
-
-
-
-extension Notification.Name {
-    static let loginSuccess = Notification.Name("loginSuccess")
-}
 
 
 struct HomeView_Previews: PreviewProvider {
@@ -378,4 +307,3 @@ struct HomeView_Previews: PreviewProvider {
         MainTabView()
     }
 }
-
