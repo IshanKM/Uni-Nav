@@ -1,6 +1,5 @@
 import SwiftUI
 
-// Simple profile manager - just for UI demo
 class UserProfileManager: ObservableObject {
     @Published var isProfileComplete: Bool = false
     @Published var selectedAvatar: String = ""

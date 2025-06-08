@@ -5,6 +5,8 @@ struct ForgotPasswordView: View {
     @State private var emailAddress: String = ""
     @State private var showPasswordResetModal: Bool = false
     @State private var navigateToLogin = false
+    @State private var showEmptyUsernameAlert = false // ADDED
+    @State private var showEmptyEmailAlert = false // ADDED
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
@@ -134,7 +136,7 @@ struct ForgotPasswordView: View {
                     Color.black.opacity(0.4)
                         .ignoresSafeArea()
 
-                    // Password Reset Modal
+                   
                     PasswordResetModal(
                         isPresented: $showPasswordResetModal,
                         onContinue: {
@@ -144,17 +146,41 @@ struct ForgotPasswordView: View {
                 }
             }
             .navigationBarHidden(true)
+        
+            .alert("Username Required", isPresented: $showEmptyUsernameAlert) {
+                Button("OK") { }
+            } message: {
+                Text("Please enter your username to search.")
+            }
+           
+            .alert("Email Required", isPresented: $showEmptyEmailAlert) {
+                Button("OK") { }
+            } message: {
+                Text("Please enter your email address to search.")
+            }
         }
     }
 
+   
     private func searchByUsername() {
+        if username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            showEmptyUsernameAlert = true
+            return
+        }
+        
         print("Searching by username: \(username)")
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             showPasswordResetModal = true
         }
     }
 
+   
     private func searchByEmail() {
+        if emailAddress.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            showEmptyEmailAlert = true
+            return
+        }
+        
         print("Searching by email: \(emailAddress)")
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             showPasswordResetModal = true
@@ -205,9 +231,6 @@ struct PasswordResetModal: View {
         .animation(.spring(response: 0.3, dampingFraction: 0.8), value: isPresented)
     }
 }
-
-
-
 
 struct ForgotPasswordView_Previews: PreviewProvider {
     static var previews: some View {
