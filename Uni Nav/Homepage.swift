@@ -192,56 +192,6 @@ struct HomeView: View {
 
 
 
-
-struct NavigationCard: View {
-    let title: String
-    let imageName: String
-
-    var body: some View {
-        VStack(spacing: 12) {
-            Image(imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 130)
-                .cornerRadius(12)
-
-            Text(title)
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .foregroundColor(.black)
-                .multilineTextAlignment(.center)
-        }
-        .padding(16)
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 2)
-    }
-}
-
-struct TabButton: View {
-    let title: String
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 4) {
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(isSelected ? .medium : .regular)
-                    .foregroundColor(isSelected ? .blue : .gray)
-                
-                if isSelected {
-                    Rectangle()
-                        .fill(Color.blue)
-                        .frame(width: 60, height: 2)
-                        .cornerRadius(1)
-                }
-            }
-        }
-    }
-}
-
 struct AnnouncementCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {

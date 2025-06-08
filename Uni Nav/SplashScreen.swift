@@ -48,7 +48,6 @@ struct SplashScreenView: View {
                                     .opacity(logoOpacity)
                             }
 
-                            // Animated Text
                             VStack(spacing: 8) {
                                 Text("Campus Navigator")
                                     .font(.title2)
@@ -67,7 +66,7 @@ struct SplashScreenView: View {
 
                         Spacer()
 
-                        // Animated Footer
+
                         VStack(spacing: 16) {
                             VStack(spacing: 4) {
                                 Text("Copyright © 2025 NIBM Campus")
@@ -98,24 +97,24 @@ struct SplashScreenView: View {
     }
 
     private func startAnimations() {
-        // Clean logo animation (scale + fade only)
+        
         withAnimation(.easeOut(duration: 0.8)) {
             logoOpacity = 1.0
             logoScale = 1.0
         }
         
-        // Text animations with delay
+
         withAnimation(.easeOut(duration: 0.6).delay(0.3)) {
             textOpacity = 1.0
             textOffset = 0
         }
         
-        // Progress bar animation with delay
+
         withAnimation(.easeOut(duration: 0.5).delay(0.6)) {
             progressOpacity = 1.0
         }
         
-        // Start loading progress
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             startLoading()
         }

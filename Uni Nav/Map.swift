@@ -420,7 +420,7 @@ struct EnhancedSVGWebView: UIViewRepresentable {
         webView.scrollView.bounces = false
         webView.navigationDelegate = context.coordinator
         
-        // Disable built-in zoom and pan
+
         webView.scrollView.pinchGestureRecognizer?.isEnabled = false
         webView.scrollView.panGestureRecognizer.isEnabled = false
         
@@ -440,7 +440,7 @@ struct EnhancedSVGWebView: UIViewRepresentable {
         if let svgPath = Bundle.main.path(forResource: svgFileName, ofType: "svg"),
            let svgContent = try? String(contentsOfFile: svgPath) {
             
-            // Generate click handlers for each room
+
             let roomClickHandlers = roomDatabase.keys.map { roomId in
                 """
                 document.getElementById('\(roomId)')?.addEventListener('click', function(e) {
@@ -723,7 +723,6 @@ struct RoomDetailView: View {
                     
                     Divider()
                     
-                    // Details
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Room Information")
                             .font(.headline)
